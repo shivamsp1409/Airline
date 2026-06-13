@@ -1,0 +1,79 @@
+
+<!doctype html><html><head>
+<meta charset='utf-8'>
+<title>Airline CEO/CFO Board Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+<style>
+body{margin:0;background:#eef3f8;font-family:Segoe UI,Arial}
+.header{background:#0f172a;color:#fff;padding:28px 40px}
+.header h1{margin:0;font-size:34px}
+.wrap{padding:24px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.card,.sec{background:#fff;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.card{padding:18px}
+.lab{color:#64748b;font-size:12px;text-transform:uppercase}
+.val{font-size:34px;font-weight:800}
+.sec{padding:20px;margin-top:18px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+table{width:100%;border-collapse:collapse} th,td{padding:10px;border-bottom:1px solid #e5e7eb}
+.bad{background:#fee2e2;padding:4px 8px;border-radius:999px}
+.good{background:#dcfce7;padding:4px 8px;border-radius:999px}
+.note{background:#fff7ed;border-left:6px solid #f59e0b;padding:14px;border-radius:8px;margin-top:12px}
+canvas{max-height:420px}
+</style></head><body>
+<div class='header'><h1>Airline Executive Board Review 2024</h1>
+<div>Fleet Health • Route Profitability • Cost Exposure • CEO/CFO Presentation View</div></div>
+<div class='wrap'>
+<div class='kpis'>
+<div class='card'><div class='lab'>Total Revenue</div><div class='val'>$2108.2M</div></div>
+<div class='card'><div class='lab'>Total Profit</div><div class='val'>$575.5M</div></div>
+<div class='card'><div class='lab'>Avg Margin</div><div class='val'>6.2%</div></div>
+<div class='card'><div class='lab'>Load Factor</div><div class='val'>0.8%</div></div>
+<div class='card'><div class='lab'>Profitable Flights</div><div class='val'>66.3%</div></div>
+<div class='card'><div class='lab'>Loss Making</div><div class='val'>33.7%</div></div>
+</div>
+
+<div class='sec'><h2>Monthly P&L Trend</h2><canvas id='pnl'></canvas>
+<div class='note'><b>Executive Takeaway:</b> Revenue, Cost and Profit seasonality visible at a glance for board review.</div></div>
+
+<div class='row'>
+<div class='sec'><h2>Haul Segment Profitability</h2><canvas id='haul'></canvas></div>
+<div class='sec'><h2>Aircraft Margin Ranking</h2><canvas id='air'></canvas></div>
+</div>
+
+<div class='row'>
+<div class='sec'><h2>Top 5 Routes</h2>
+<table><tr><th>Route</th><th>Avg Profit</th></tr>
+<tr><td>DXB-FRA</td><td>$306,128</td></tr><tr><td>DXB-SIN</td><td>$284,359</td></tr><tr><td>DXB-CDG</td><td>$279,191</td></tr><tr><td>DXB-HKG</td><td>$269,674</td></tr><tr><td>DXB-BKK</td><td>$191,339</td></tr>
+</table></div>
+
+<div class='sec'><h2>Bottom 5 Routes</h2>
+<table><tr><th>Route</th><th>Avg Profit</th></tr>
+<tr><td>DXB-CAI</td><td>$-40,747</td></tr><tr><td>DXB-LAX</td><td>$-38,376</td></tr><tr><td>DXB-AMM</td><td>$-36,132</td></tr><tr><td>DXB-SFO</td><td>$-28,544</td></tr><tr><td>DXB-LHR</td><td>$-19,476</td></tr>
+</table></div>
+</div>
+
+<div class='sec'><h2>Cost Exposure Ranking</h2><canvas id='cost'></canvas></div>
+</div>
+
+<script>
+new Chart(pnl,{type:'bar',data:{labels:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+datasets:[
+{label:'Revenue',backgroundColor:'#2563eb',data:[198972587.12, 205217685.28, 184736136.21, 184067320.21, 169266256.45, 143514220.02, 139485399.8, 141726955.85999998, 163727357.4, 176959332.42, 189880519.22, 210643239.25]},
+{label:'Cost',backgroundColor:'#f59e0b',data:[153091840.0, 157212235.38, 152425686.74, 149726255.9, 147912407.98, 142440445.78, 141720261.06, 141555413.05, 142982003.94, 147850262.34, 158606626.76, 160752140.46]},
+{label:'Profit',backgroundColor:'#16a34a',data:[70815387.01, 73542224.03, 55368218.69, 57175063.76, 42551397.4, 18901917.2, 15144716.2, 17786040.02, 41560258.23, 51155075.53, 55059917.93, 76420444.99]}]},
+options:{animation:false}});
+
+new Chart(haul,{type:'bar',data:{labels:["Short Haul", "Medium Haul", "Long Haul"],
+datasets:[{data:[-8841.135343092406, 30232.148412017166, 160410.04231627908],backgroundColor:'#2563eb'}]},
+options:{animation:false}});
+
+new Chart(air,{type:'bar',data:{labels:["Boeing 737-800", "Airbus A320", "Airbus A350-900", "Boeing 787-9", "Boeing 777-300ER", "Airbus A380"],
+datasets:[{data:[-9.502458210422812, -7.872991631799163, 1.0407058823529411, 9.478239823982397, 17.259136094674556, 23.181374527112233],backgroundColor:["#dc2626", "#dc2626", "#16a34a", "#16a34a", "#16a34a", "#16a34a"]}]},
+options:{indexAxis:'y',animation:false}});
+
+new Chart(cost,{type:'bar',data:{labels:["Fuel_Cost", "Sales_Distribution_Cost", "Overhead_Cost", "Depreciation_Cost", "Maintenance_Cost", "Marketing_Cost", "Crew_Cost", "Catering_Cost", "Passenger_Service_Cost", "Insurance_Cost", "Handling_Cost", "IT_Systems_Cost"],
+datasets:[{data:[369167540.47, 356112798.61, 285008826.73999995, 201413790.0, 151292495.0, 107235819.69, 71009402.0, 46244347.65, 45627085.03, 35922437.0, 30787091.32, 23369708.810000002],backgroundColor:'#7c3aed'}]},
+options:{animation:false}});
+</script>
+</body></html>
